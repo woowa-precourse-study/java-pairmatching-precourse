@@ -3,6 +3,7 @@ package pairmatching;
 import camp.nextstep.edu.missionutils.Console;
 import pairmatching.domain.Course;
 import pairmatching.domain.Level;
+import pairmatching.domain.MatchingMachine;
 import pairmatching.exception.Validator;
 import pairmatching.utils.Parser;
 import pairmatching.utils.RandomGenerator;
@@ -36,20 +37,29 @@ public class Application {
     }
 
     static void run() {
-        try {
-            System.out.println("기능을 선택하세요.\n 1. 페어 매칭\n 2. 페어 조회\n 3. 페어 초기화\n Q. 종료");
-            String choice = readInputWithRetry(List.of(
-                    Validator::validateNotBlank,
-                    Validator::validateInputFormat
-            ));
+        while(true){
+            try {
+                System.out.println("기능을 선택하세요.\n 1. 페어 매칭\n 2. 페어 조회\n 3. 페어 초기화\n Q. 종료");
+                String choice = readInputWithRetry(List.of(
+                        Validator::validateNotBlank,
+                        Validator::validateInputFormat
+                ));
 
-            Runnable command = commands.get(choice);
-            command.run();
+                if (choice.equals("Q")){
+                    break;
+                }
+
+                Runnable command = commands.get(choice);
+                command.run();
 
 
-        } catch (IllegalArgumentException | NoSuchElementException e) { // 입력안함은 여기서 자동 제거
-            System.out.println(PREFIX_ERROR + e.getMessage());
+            } catch (IllegalArgumentException | NoSuchElementException e) { // 입력안함은 여기서 자동 제거
+                System.out.println(PREFIX_ERROR + e.getMessage());
+            }
+
+
         }
+
 
     }
 
@@ -60,7 +70,7 @@ public class Application {
         commands.put("Q", Application::quit);
     }
 
-    static void pairMatching() {
+    static MatchingMachine pairMatching() {
         System.out.println("""
                                 
                 #############################################
@@ -82,6 +92,7 @@ public class Application {
 
         Course course = Course.fromName(options.get(0));
         Level level = Level.fromLevel(options.get(1));
+        String mission=options.get(2);
 
         // 파일 읽어오기
         String content = readFile(course.getFileName());
@@ -103,15 +114,30 @@ public class Application {
             System.out.println(String.join(" : ",crew));
         }
 
-
-
-
-
+        return new MatchingMachine(level,course,mission,crews);
 
     }
 
     static void pairCheck() {
-        System.out.println("페어 조회");
+        System.out.println("""
+                                
+                #############################################
+                과정: 백엔드 | 프론트엔드
+                미션:
+                  - 레벨1: 자동차경주 | 로또 | 숫자야구게임
+                  - 레벨2: 장바구니 | 결제 | 지하철노선도
+                  - 레벨3:\s
+                  - 레벨4: 성능개선 | 배포
+                  - 레벨5:\s
+                ############################################
+                과정, 레벨, 미션을 선택하세요.
+                ex) 백엔드, 레벨1, 자동차경주
+                """);
+
+        // TODO: 이미 페어매칭이 있는지 확인
+        System.out.println("페어 매칭 결과입니다.");
+
+
     }
 
     static void pairReset() {
@@ -119,7 +145,7 @@ public class Application {
     }
 
     static void quit() {
-        System.out.println("종료");
+        return;
     }
 
     public static String readFile(String fileName) {
