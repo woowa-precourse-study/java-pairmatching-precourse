@@ -2,6 +2,7 @@ package pairmatching.command;
 
 import java.util.EnumMap;
 import pairmatching.command.impl.FeatureACommand;
+import pairmatching.command.impl.FeatureBCommand;
 import pairmatching.command.impl.QuitCommand;
 import pairmatching.service.PairMatchingService;
 
@@ -16,6 +17,7 @@ public class MenuCommandRegistry {
     public static MenuCommandRegistry defaultRegistry(PairMatchingService service) {
         EnumMap<MenuOption, Command<? extends Command<?>>> map = new EnumMap<>(MenuOption.class);
         map.put(MenuOption.A, new FeatureACommand(service));
+        map.put(MenuOption.B, new FeatureBCommand(service));
         map.put(MenuOption.QUIT, new QuitCommand());
         return new MenuCommandRegistry(map);
     }

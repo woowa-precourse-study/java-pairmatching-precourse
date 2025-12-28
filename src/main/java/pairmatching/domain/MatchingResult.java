@@ -91,4 +91,8 @@ public class MatchingResult {
     public void addResult(List<Set<Crew>> matching, Course course, Level level, Mission mission) {
         matchingResults.get(course).get(level).put(mission, matching);
     }
+
+    public List<Set<Crew>> getMatching(Course course, Level level, Mission mission) {
+        return matchingResults.get(course).get(level).get(mission);
+    }
 }

@@ -45,4 +45,8 @@ public class PairMatchingService {
     public void removeRecord(Course course, Level level, Mission mission) {
         matchingResult.remove(course, level, mission);
     }
+
+    public List<Set<Crew>> getMatching(Course course, Level level, Mission mission) {
+        return matchingResult.getMatching(course, level, mission);
+    }
 }
