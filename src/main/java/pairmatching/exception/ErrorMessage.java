@@ -11,11 +11,6 @@ public enum ErrorMessage{
         this.message = message;
     }
 
-    private String message(String message){
-        this.message = message;
-        return message;
-    }
-
     public String getMessage(){
         String prefix = "[ERROR]";
         return prefix + message;
