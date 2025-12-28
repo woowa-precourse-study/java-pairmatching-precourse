@@ -26,7 +26,4 @@ public enum Course {
         return fileName;
     }
 
-
-    // 매칭 정보가 있는지 확인
-
 }
