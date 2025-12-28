@@ -5,15 +5,24 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.stream.Collectors;
+import pairmatching.domain.Course;
 import pairmatching.domain.Crew;
 import pairmatching.domain.Pair;
 import pairmatching.domain.PairGenerator;
 
 public class RandomPairGenerator implements PairGenerator {
     @Override
-    public List<Pair> generate(List<Crew> crews) {
-        List<Crew> shuffledCrew = Randoms.shuffle(crews);
-        Deque<Crew> queue = new ArrayDeque<>(shuffledCrew);
+    public List<Pair> generate(Course course, List<Crew> crews) {
+        List<String> crewNames = crews.stream()
+                .map(Crew::getName)
+                .collect(Collectors.toList());
+
+        List<String> shuffleNames = Randoms.shuffle(crewNames);
+
+        Deque<Crew> queue = shuffleNames.stream()
+                .map(name -> new Crew(course, name))
+                .collect(Collectors.toCollection(ArrayDeque::new));
 
         List<Pair> pairs = new ArrayList<>();
 

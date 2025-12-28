@@ -1,6 +1,7 @@
 package pairmatching.domain.crewgroup;
 
 import java.util.List;
+import pairmatching.domain.Course;
 import pairmatching.domain.Crew;
 import pairmatching.domain.CrewGroup;
 import pairmatching.domain.Pair;
@@ -15,6 +16,6 @@ public class FrontEndCrewGroup implements CrewGroup {
 
     @Override
     public List<Pair> generatePairs(PairGenerator generator) {
-        return generator.generate(crews);
+        return generator.generate(Course.FRONTEND, crews);
     }
 }

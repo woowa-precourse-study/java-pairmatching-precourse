@@ -24,7 +24,9 @@ public class OutputView {
                     .map(Crew::getName)
                     .collect(Collectors.joining(" : "));
 
-            System.out.println(printPair + "\n");
+            System.out.println(printPair);
         }
+
+        System.out.println();
     }
 }
