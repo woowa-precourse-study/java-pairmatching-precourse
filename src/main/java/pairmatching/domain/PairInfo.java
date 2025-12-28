@@ -14,4 +14,20 @@ public class PairInfo {
         this.mission = mission;
         this.pairList = pairList;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public String getMission() {
+        return mission;
+    }
+
+    public List<List<String>> getPairList() {
+        return pairList;
+    }
 }

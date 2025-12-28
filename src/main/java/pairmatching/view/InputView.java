@@ -1,6 +1,9 @@
 package pairmatching.view;
 
 import camp.nextstep.edu.missionutils.Console;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class InputView {
 
@@ -17,9 +20,17 @@ public class InputView {
         }
     }
 
-
-
-
+    public static List<String> readDetails(){
+        System.out.println("과정, 레벨, 미션을 선택하세요.\n"
+                + "ex) 백엔드, 레벨1, 자동차경주");
+        try{
+            String input = Console.readLine();
+            List<String> details = Arrays.asList(input.replaceAll(" ","").split(","));
+            return details;
+        }catch (IllegalArgumentException e){
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 
     public static String readInput(){
         System.out.println("입력받는 메서드");
@@ -30,12 +41,12 @@ public class InputView {
 
 
     // 오류 발생 지점 부터 재 입력 받는 로직
-    public static String readInputWithRetry(){
+    public static String readInputWithRetry() {
         System.out.println("이 부분이 반복 됩니다.");
-        try{
+        try {
             String input = Console.readLine();
             return input;
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
