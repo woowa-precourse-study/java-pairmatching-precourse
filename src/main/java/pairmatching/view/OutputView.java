@@ -8,6 +8,7 @@ import org.mockito.internal.util.StringUtil;
 import pairmatching.domain.Crew;
 import pairmatching.view.model.FeatureAModel;
 import pairmatching.view.model.FeatureBModel;
+import pairmatching.view.model.FeatureCModel;
 import pairmatching.view.model.QuitModel;
 import pairmatching.view.model.ViewModel;
 import pairmatching.view.model.ViewModelVisitor;
@@ -57,6 +58,11 @@ public class OutputView {
                 System.out.println(String.join(" : ", new ArrayList<>(pairList)));
             }
             System.out.println();
+        }
+
+        @Override
+        public void visit(FeatureCModel model) {
+            System.out.println("\n초기화 되었습니다.");
         }
 
         @Override

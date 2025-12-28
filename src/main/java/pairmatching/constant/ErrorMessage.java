@@ -6,7 +6,8 @@ public enum ErrorMessage {
     INVALID_COURSE("잘못된 과정을 입력했습니다."),
     INVALID_LEVEL("잘못된 과정을 입력했습니다."),
     INVALID_MISSION("잘못된 미션을 입력했습니다."),
-    NO_EXIST_MATCHING_RESULT("매칭 이력이 없습니다.");
+    NO_EXIST_MATCHING_RESULT("매칭 이력이 없습니다."),
+    MATCHING_FAIL("매칭에 실패했습니다.");
 
     private static final String ERROR_MESSAGE_PREFIX = "[ERROR] ";
     private final String errorMessage;

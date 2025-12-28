@@ -49,4 +49,9 @@ public class PairMatchingService {
     public List<Set<Crew>> getMatching(Course course, Level level, Mission mission) {
         return matchingResult.getMatching(course, level, mission);
     }
+
+    public void reset() {
+        crews.reset();
+        matchingResult.reset();
+    }
 }

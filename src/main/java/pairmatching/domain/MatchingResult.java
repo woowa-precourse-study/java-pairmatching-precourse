@@ -95,4 +95,17 @@ public class MatchingResult {
     public List<Set<Crew>> getMatching(Course course, Level level, Mission mission) {
         return matchingResults.get(course).get(level).get(mission);
     }
+
+    public void reset() {
+        matchingResults = new EnumMap<>(Course.class);
+        for (Course course : Course.values()) {
+            matchingResults.put(course, new EnumMap<>(Level.class));
+            for (Level level : Level.values()) {
+                matchingResults.get(course).put(level, new EnumMap<>(Mission.class));
+                for (Mission mission : Mission.values()) {
+                    matchingResults.get(course).get(level).put(mission, new ArrayList<>());
+                }
+            }
+        }
+    }
 }
