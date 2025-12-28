@@ -12,7 +12,7 @@ public class InputView {
     }
 
     public static String readMenuSelection() {
-        System.out.println("기능을 선택하세요.\n"
+        System.out.println("\n기능을 선택하세요.\n"
                 + "1. 페어 매칭\n"
                 + "2. 페어 조회\n"
                 + "3. 페어 초기화\n"
@@ -21,7 +21,7 @@ public class InputView {
     }
 
     public static String readContents() {
-        System.out.println("#############################################\n"
+        System.out.println("\n#############################################\n"
                 + "과정: 백엔드 | 프론트엔드\n"
                 + "미션:\n"
                 + "  - 레벨1: 자동차경주 | 로또 | 숫자야구게임\n"
@@ -32,6 +32,12 @@ public class InputView {
                 + "############################################\n"
                 + "과정, 레벨, 미션을 선택하세요.\n"
                 + "ex) 백엔드, 레벨1, 자동차경주");
+        return Console.readLine();
+    }
+
+    public static String readRematching() {
+        System.out.println("\n매칭 정보가 있습니다. 다시 매칭하시겠습니까?\n"
+                + "네 | 아니오");
         return Console.readLine();
     }
 }

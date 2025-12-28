@@ -1,14 +1,15 @@
 package pairmatching.view.model;
 
-import pairmatching.view.model.ViewModel;
-import pairmatching.view.model.ViewModelVisitor;
+import java.util.List;
+import java.util.Set;
+import pairmatching.domain.Crew;
 
 public class FeatureAModel implements ViewModel {
 
-    private final String name;
+    private final List<Set<Crew>> matching;
 
-    public FeatureAModel(String name) {
-        this.name = name;
+    public FeatureAModel(List<Set<Crew>> matching) {
+        this.matching = matching;
     }
 
     @Override
@@ -16,7 +17,7 @@ public class FeatureAModel implements ViewModel {
         visitor.visit(this);
     }
 
-    public String getName() {
-        return name;
+    public List<Set<Crew>> getMatching() {
+        return matching;
     }
 }

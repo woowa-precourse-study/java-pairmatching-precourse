@@ -30,4 +30,13 @@ public class Crew {
     public int hashCode() {
         return Objects.hash(course, name);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
