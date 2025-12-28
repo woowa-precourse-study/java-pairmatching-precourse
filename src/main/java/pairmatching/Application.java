@@ -180,7 +180,8 @@ public class Application {
     }
 
     static void pairReset() {
-        System.out.println("페어 초기화");
+        crewGroup = new HashMap<>();
+        System.out.println("\n초기화 되었습니다. \n");
     }
 
     static void quit() {
