@@ -8,6 +8,7 @@ import pairmatching.command.Command;
 import pairmatching.command.CommandResponse;
 import pairmatching.command.RematchOption;
 import pairmatching.constant.Course;
+import pairmatching.constant.ErrorMessage;
 import pairmatching.constant.Level;
 import pairmatching.constant.Mission;
 import pairmatching.domain.Crew;
@@ -15,6 +16,7 @@ import pairmatching.service.PairMatchingService;
 import pairmatching.util.InputParser;
 import pairmatching.util.Retry;
 import pairmatching.view.InputView;
+import pairmatching.view.OutputView;
 import pairmatching.view.model.FeatureAModel;
 
 public class FeatureACommand implements Command<FeatureACommand> {
@@ -65,6 +67,14 @@ public class FeatureACommand implements Command<FeatureACommand> {
                 if (!matching.isEmpty()) {
                     break;
                 }
+            }
+
+            try {
+                if (matching.isEmpty()) {
+                    throw new IllegalArgumentException(ErrorMessage.MATCHING_FAIL.getErrorMessage());
+                }
+            } catch (IllegalArgumentException e) {
+                OutputView.printErrorMessage(e);
             }
 
             if (matching.isEmpty()) {
