@@ -20,8 +20,8 @@ public class ShuffleService {
         List<List<String>> pairList = new ArrayList<>();
 
         //원본 리스트
-        List<String> shuffledList = randomGenerator.getShuffledList(memberList);
-
+        List<String> List = randomGenerator.getShuffledList(memberList);
+        List<String> shuffledList = new ArrayList<>(List);
         // 결과 저장 List
         while(!shuffledList.isEmpty()){
             List<String> result = new ArrayList<>();

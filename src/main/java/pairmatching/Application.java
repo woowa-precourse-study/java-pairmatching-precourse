@@ -59,7 +59,6 @@ public class Application {
 //        2. 기능 입력 받기
             String command = InputView.readCommand();
 
-
             if (command.equals("1")) {
 //        3. 페어 매칭 기능
 //            1. 과정, 레벨, 미션 입력 받기
@@ -69,11 +68,26 @@ public class Application {
                 Level level = Level.getLevel(details.get(1));
                 String missionName = details.get(2);
 
+                if(!level.isMissionInList(missionName)){
+                    System.out.println(ErrorMessage.NO_MISSION.getMessage());
+                    continue;
+                }
+
+                List<List<String>> prePairList = new ArrayList<>();
+                prePairList = getLists(pairInfos, Course.getCourse(courseName), level, missionName, prePairList);
+                if(!prePairList.isEmpty()){
+                    String isRewrite = InputView.readRewrite();
+                    if(isRewrite.equals("아니오")){
+                        continue;
+                    }
+
+                }
                 // 과정에 해당하는 멤버 List 가져오기
                 List<String> memberList = memberListMap.get(courseName);
                 List<Crew> crewList = memberCrewMap.get(Course.getCourse(courseName));
                 ShuffleService shuffleService = new ShuffleService(shuffle, crewList);
                 List<List<String>> pairList = shuffleService.getPairList(level, memberList);
+
 
 //            3. 해당 미션에 대한 페어 정보 저장해두기
                 pairInfos.add(new PairInfo(Course.getCourse(courseName), level, missionName, pairList));
@@ -88,21 +102,14 @@ public class Application {
                 String missionName = details.get(2);
 //            2. 과정, 레벨, 미션에 대한 페어 정보 찾기
                 List<List<String>> pairList = new ArrayList<>();
-                for (PairInfo pairInfo : pairInfos) {
-
-                    if (pairInfo.getCourse().equals(course)
-                            && pairInfo.getLevel().equals(level)
-                            && pairInfo.getMission().equals(missionName)) {
-                        if (pairInfo.getPairList() == null) {
-                            System.out.println(ErrorMessage.NO_PAIR_RECORD.getMessage());
-                            break;
-                        }
-                        pairList = pairInfo.getPairList();
-                    }
-                }
+                pairList = getLists(pairInfos, course, level, missionName, pairList);
 
 //            3. 결과 출력하기
 //                1. 페어 정보 출력
+                if (pairList.isEmpty()) {
+                    System.out.println(ErrorMessage.NO_PAIR_RECORD.getMessage());
+                    continue;
+                }
                 OutputView.printPairList(pairList);
 //                2. 없을 경우 에러 메시지 출력
 
@@ -116,5 +123,29 @@ public class Application {
                 return;
             }
         }
+    }
+
+    private static List<List<String>> getLists(List<PairInfo> pairInfos, Course course, Level level, String missionName,
+                                               List<List<String>> pairList) {
+        for (PairInfo pairInfo : pairInfos) {
+
+            if (pairInfo.getCourse().equals(course)
+                    && pairInfo.getLevel().equals(level)
+                    && pairInfo.getMission().equals(missionName)) {
+                if (extracted(pairInfo)) {
+                    break;
+                }
+                pairList = pairInfo.getPairList();
+            }
+        }
+        return pairList;
+    }
+
+    private static boolean extracted(PairInfo pairInfo) {
+        if (pairInfo.getPairList() == null) {
+            System.out.println(ErrorMessage.NO_PAIR_RECORD.getMessage());
+            return true;
+        }
+        return false;
     }
 }
