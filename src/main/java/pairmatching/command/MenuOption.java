@@ -20,6 +20,6 @@ public enum MenuOption {
         return Arrays.stream(values())
                 .filter(opt -> opt.code.equals(normalized))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MENU_SELECTION.getErrorMessage()));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getErrorMessage()));
     }
 }

@@ -2,7 +2,10 @@ package pairmatching.constant;
 
 public enum ErrorMessage {
 
-    INVALID_MENU_SELECTION("잘못된 형식을 입력했습니다."),
+    INVALID_FORMAT("잘못된 형식을 입력했습니다."),
+    INVALID_COURSE("잘못된 과정을 입력했습니다."),
+    INVALID_LEVEL("잘못된 과정을 입력했습니다."),
+    INVALID_MISSION("잘못된 미션을 입력했습니다."),
     ;
 
     private static final String ERROR_MESSAGE_PREFIX = "[ERROR] ";

@@ -1,5 +1,7 @@
 package pairmatching.constant;
 
+import java.util.Arrays;
+
 public enum Mission {
 
     RACING_CAR("자동차경주"),
@@ -16,5 +18,12 @@ public enum Mission {
 
     Mission(String name) {
         this.name = name;
+    }
+
+    public static Mission from(String missionName) {
+        return Arrays.stream(values())
+                .filter(mission -> mission.name.equals(missionName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MISSION.getErrorMessage()));
     }
 }

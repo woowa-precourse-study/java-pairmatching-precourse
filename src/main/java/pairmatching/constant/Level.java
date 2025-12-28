@@ -1,5 +1,7 @@
 package pairmatching.constant;
 
+import java.util.Arrays;
+
 public enum Level {
 
     LEVEL1("레벨1"),
@@ -12,5 +14,12 @@ public enum Level {
 
     Level(String name) {
         this.name = name;
+    }
+
+    public static Level from(String levelName) {
+        return Arrays.stream(values())
+                .filter(level -> level.name.equals(levelName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_LEVEL.getErrorMessage()));
     }
 }

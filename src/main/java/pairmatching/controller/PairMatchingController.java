@@ -26,6 +26,7 @@ public class PairMatchingController {
     public void run() throws IOException {
 
         registerFileInfo();
+        service.init();
 
         while (true) {
             String selection = InputView.readMenuSelection();
