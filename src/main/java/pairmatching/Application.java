@@ -1,9 +1,7 @@
 package pairmatching;
 
 import camp.nextstep.edu.missionutils.Console;
-import pairmatching.domain.Course;
-import pairmatching.domain.Level;
-import pairmatching.domain.MatchingMachine;
+import pairmatching.domain.*;
 import pairmatching.exception.Validator;
 import pairmatching.utils.Parser;
 import pairmatching.utils.RandomGenerator;
@@ -23,6 +21,7 @@ public class Application {
     static final int MAX_RETRY = 10;
     static final String BACKEND_FILE_NAME = "backend-crew2.md";
     static final String FRONT_FILE_NAME = "frontend-crew2.md";
+    static Map<Options, List<List<String>>> crewGroup = new HashMap<>();
 
 
     // ===== main / run =====
@@ -49,6 +48,7 @@ public class Application {
                     break;
                 }
 
+
                 Runnable command = commands.get(choice);
                 command.run();
 
@@ -70,7 +70,7 @@ public class Application {
         commands.put("Q", Application::quit);
     }
 
-    static MatchingMachine pairMatching() {
+    static void pairMatching() {
         System.out.println("""
                                 
                 #############################################
@@ -82,39 +82,64 @@ public class Application {
                   - 레벨4: 성능개선 | 배포
                   - 레벨5:\s
                 ############################################
+                """);
+        while(true){
+            System.out.println("""
                 과정, 레벨, 미션을 선택하세요.
                 ex) 백엔드, 레벨1, 자동차경주
                 """);
-        String option = readInputWithRetry(List.of(
-                Validator::validateNotBlank
-        ));
-        List<String> options = Parser.splitBy(option, ",");
 
-        Course course = Course.fromName(options.get(0));
-        Level level = Level.fromLevel(options.get(1));
-        String mission=options.get(2);
+            String input = readInputWithRetry(List.of(
+                    Validator::validateNotBlank
+            ));
+            List<String> inputs = Parser.splitBy(input, ",");
+            Course course = Course.fromName(inputs.get(0));
+            Level level = Level.fromLevel(inputs.get(1));
+            String mission=inputs.get(2);
+            Options options=new Options(level,course,mission);
 
-        // 파일 읽어오기
-        String content = readFile(course.getFileName());
-        List<String> names = RandomGenerator.getRandomNames(Parser.splitBy(content, "\n"));
+            if (crewGroup.containsKey(options)){
+                System.out.println("매칭 정보가 있습니다. 다시 매칭하시겠습니까?");
+                // TODO: 이미 페어매칭이 있는지 확인
+                String response = readInputWithRetry(List.of(
+                        Validator::validateNotBlank,
+                        Validator::validateFormat
+                ));
+                if (response.equals("아니오")){
+                    continue;
+                }
 
-
-        Deque<String> queue = new ArrayDeque<>(names);
-        List<List<String>> crews= new ArrayList<>();
-        while (!queue.isEmpty()){
-            if (queue.size()==3){
-                crews.add(List.of(queue.pollFirst(),queue.pollFirst(),queue.pollFirst()));
-                break;
             }
-            crews.add(List.of(queue.pollFirst(),queue.pollFirst()));
+
+
+            // 파일 읽어오기
+            String content = readFile(course.getFileName());
+            List<String> names = RandomGenerator.getRandomNames(Parser.splitBy(content, "\n"));
+
+
+            Deque<String> queue = new ArrayDeque<>(names);
+            List<List<String>> crews= new ArrayList<>();
+            while (!queue.isEmpty()){
+                if (queue.size()==3){
+                    crews.add(List.of(queue.pollFirst(),queue.pollFirst(),queue.pollFirst()));
+                    break;
+                }
+                crews.add(List.of(queue.pollFirst(),queue.pollFirst()));
+            }
+
+            crewGroup.put(options,crews);
+
+            System.out.println("페어 매칭 결과입니다.");
+            for (List<String> crew: crews){
+                System.out.println(String.join(" : ",crew));
+            }
+            break;
+
+
         }
 
-        System.out.println("페어 매칭 결과입니다.");
-        for (List<String> crew: crews){
-            System.out.println(String.join(" : ",crew));
-        }
 
-        return new MatchingMachine(level,course,mission,crews);
+
 
     }
 
@@ -134,7 +159,9 @@ public class Application {
                 ex) 백엔드, 레벨1, 자동차경주
                 """);
 
-        // TODO: 이미 페어매칭이 있는지 확인
+
+
+
         System.out.println("페어 매칭 결과입니다.");
 
 

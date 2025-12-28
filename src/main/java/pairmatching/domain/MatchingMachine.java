@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchingMachine {
-    private final Level level;
-    private final Course course;
-    private final String mission;
+    private final Options options;
     private final List<List<String>> crews;
 
-    public MatchingMachine(Level level,Course course,String mission, List<List<String>> crews) {
-        this.level=level;
-        this.course=course;
-        this.mission=mission;
+    public MatchingMachine(String levelInput,String course,String mission, List<List<String>> crews) {
+        Level level = Level.fromLevel(levelInput);
+        level.validateMission(mission);
+        this.options=new Options(level, Course.fromName(course), mission);
         this.crews=crews;
     }
 

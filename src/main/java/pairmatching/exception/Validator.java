@@ -12,11 +12,20 @@ public interface Validator {
     }
 
     static void validateInputFormat(String input) {
-
         if (!Set.of("1","2","3","Q").contains(input)) {
             throw new IllegalArgumentException("1,2,3,Q 중에서 입력해주세요");
         }
     }
+
+    static void validateFormat(String input) {
+        if (!Set.of("네","아니오").contains(input)) {
+            throw new IllegalArgumentException("네, 아니오 중에서 입력해주세요");
+        }
+    }
+
+
+
+
 }
 
 
