@@ -159,11 +159,23 @@ public class Application {
                 ex) 백엔드, 레벨1, 자동차경주
                 """);
 
+        String input = readInputWithRetry(List.of(
+                Validator::validateNotBlank
+        ));
+        List<String> inputs = Parser.splitBy(input, ",");
+        Course course = Course.fromName(inputs.get(0));
+        Level level = Level.fromLevel(inputs.get(1));
+        String mission=inputs.get(2);
+        Options options=new Options(level,course,mission);
 
-
-
-        System.out.println("페어 매칭 결과입니다.");
-
+        if (crewGroup.containsKey(options)){
+            System.out.println("페어 매칭 결과입니다.");
+            for (List<String> crew: crewGroup.get(options)){
+                System.out.println(String.join(" : ",crew));
+            }
+            return;
+        }
+        throw new IllegalArgumentException("매칭 이력이 없습니다.");
 
     }
 
