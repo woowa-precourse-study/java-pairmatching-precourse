@@ -2,6 +2,7 @@ package pairmatching.command.impl;
 
 import java.util.List;
 import pairmatching.command.Command;
+import pairmatching.command.RematchOption;
 import pairmatching.constant.Course;
 import pairmatching.constant.ErrorMessage;
 import pairmatching.constant.Level;
@@ -14,31 +15,36 @@ import pairmatching.util.Retry;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
 
-public class FeatureBCommand implements Command {
+public class MatchingCommand implements Command {
 
     private final PairMatchingService service;
 
-    public FeatureBCommand(PairMatchingService service) {
+    public MatchingCommand(PairMatchingService service) {
         this.service = service;
     }
 
     @Override
     public void execute() {
-        Content content;
 
         while (true) {
-             content = getContent();
+            Content content = getContent();
 
-            if (service.MatchingResultIsExist(content)) {
-                break;
+            if (isAlreadyMatched(content)) {
+                continue;
             }
 
-            OutputView.printErrorMessage(new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage()));
+            // 매칭 실행
+            List<Pair> matching = service.generateMatchingWithRetry(content, 3);
+
+            if (matching.isEmpty()) {
+                OutputView.printErrorMessage(new IllegalArgumentException(ErrorMessage.MATCHING_FAIL.getErrorMessage()));
+                continue;
+            }
+
+            OutputView.printMatching(matching);
+            break;
         }
 
-        List<Pair> matching =  service.getMatching(content);
-
-        OutputView.printMatching(matching);
     }
 
     private static Content getContent() {
@@ -52,5 +58,17 @@ public class FeatureBCommand implements Command {
 
             return Content.of(course, level, mission);
         });
+    }
+
+    private boolean isAlreadyMatched(Content content) {
+        if (service.MatchingResultIsExist(content)) {
+            RematchOption rematchOption = Retry.retryUntilSuccess(() -> {
+                String readRematching = InputView.readRematching();
+                return RematchOption.from(readRematching);
+            });
+
+            return rematchOption.equals(RematchOption.NO);
+        }
+        return false;
     }
 }

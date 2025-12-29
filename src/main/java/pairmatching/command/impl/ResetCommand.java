@@ -4,11 +4,11 @@ import pairmatching.command.Command;
 import pairmatching.service.PairMatchingService;
 import pairmatching.view.OutputView;
 
-public class FeatureCCommand implements Command {
+public class ResetCommand implements Command {
 
     private final PairMatchingService service;
 
-    public FeatureCCommand(PairMatchingService service) {
+    public ResetCommand(PairMatchingService service) {
         this.service = service;
     }
 
