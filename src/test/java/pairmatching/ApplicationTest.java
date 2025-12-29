@@ -64,7 +64,9 @@ class ApplicationTest extends NsTest {
                     assertThat(output()).contains(ErrorMessage.MATCHING_FAIL.getErrorMessage());
                 },
                 Arrays.asList("태웅", "백호", "치수", "태섭", "소연"),
-                Arrays.asList("태웅", "백호", "치수", "태섭", "소연", "태웅", "백호", "치수", "태섭", "소연", "태웅", "백호", "치수", "태섭", "소연")
+                Arrays.asList("태웅", "백호", "치수", "태섭", "소연"),
+                Arrays.asList("태웅", "백호", "치수", "태섭", "소연"),
+                Arrays.asList("태웅", "백호", "치수", "태섭", "소연")
         );
     }
 

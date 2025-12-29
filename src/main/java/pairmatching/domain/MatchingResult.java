@@ -66,13 +66,21 @@ public class MatchingResult {
                 continue;
             }
 
-            for (Pair pair : matching) {
-                List<Pair> pairs = pair.getPairs();
-                return pairs.stream()
-                        .anyMatch(matchingHistory::contains);
+            if (hasOverlap(matching, matchingHistory)) {
+                return false;
             }
         }
         return true;
+    }
+
+    private boolean hasOverlap(List<Pair> matching, List<Pair> matchingHistory) {
+        for (Pair pair : matching) {
+            List<Pair> pairs = pair.getPairs();
+            for (Pair currentPair : matchingHistory) {
+                return currentPair.contains(pairs);
+            }
+        }
+        return false;
     }
 
     public void addResult(List<Pair> matching, Content content) {

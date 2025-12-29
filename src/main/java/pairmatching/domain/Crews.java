@@ -9,8 +9,6 @@ import pairmatching.constant.ErrorMessage;
 
 public class Crews {
 
-    private static Crews CREWS;
-
     private final Map<Course, List<Crew>> crews;
 
     private Crews() {
@@ -19,11 +17,8 @@ public class Crews {
         crews.put(Course.FRONTEND, new ArrayList<>());
     }
 
-    public static Crews getInstance() {
-        if (CREWS == null) {
-            CREWS = new Crews();
-        }
-        return CREWS;
+    public static Crews newInstance() {
+        return new Crews();
     }
 
     public void addCrew(Course course, String name) {

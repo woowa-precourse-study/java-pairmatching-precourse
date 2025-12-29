@@ -14,7 +14,9 @@ public class PairMatchingService {
     private MatchingResult matchingResult;
 
     public void registerFileInfo(Course course, List<String> names) {
-        crews = Crews.getInstance();
+        if (crews == null) {
+            crews = Crews.newInstance();
+        }
 
         for (String name : names) {
             crews.addCrew(course, name);

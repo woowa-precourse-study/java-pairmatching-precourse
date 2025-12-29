@@ -2,7 +2,10 @@ package pairmatching.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class Pair {
 
@@ -35,5 +38,21 @@ public class Pair {
 
     public void addCrew(Crew crew) {
         pair.add(crew);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Pair pair1 = (Pair) object;
+        return new HashSet<>(pair).equals(new HashSet<>(pair1.pair));
+    }
+
+    public boolean contains(List<Pair> pairs) {
+        for (Pair pair : pairs) {
+            return this.equals(pair);
+        }
+        return false;
     }
 }
