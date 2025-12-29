@@ -4,13 +4,6 @@ import camp.nextstep.edu.missionutils.Console;
 
 public class InputView {
 
-    private static final String _REQUEST = "";
-
-    public static String read() {
-        System.out.println(_REQUEST);
-        return Console.readLine();
-    }
-
     public static String readMenuSelection() {
         System.out.println("\n기능을 선택하세요.\n"
                 + "1. 페어 매칭\n"

@@ -7,9 +7,6 @@ import pairmatching.domain.Pair;
 
 public class OutputView {
 
-    private static final String NEW_LINE = System.lineSeparator();
-    private static final String _MESSAGE = "";
-
     private OutputView() {
     }
 

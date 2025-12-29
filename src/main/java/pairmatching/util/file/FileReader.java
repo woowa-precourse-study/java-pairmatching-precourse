@@ -1,7 +1,5 @@
 package pairmatching.util.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
