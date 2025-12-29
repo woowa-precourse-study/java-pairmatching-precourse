@@ -1,10 +1,25 @@
 package pairmatching.controller;
 
+import pairmatching.domain.MatchingMachine;
+import pairmatching.domain.Options;
+import pairmatching.domain.Pairs;
+
+import java.util.List;
+import java.util.Map;
+
 public class OutputView {
 
-    public void printCourseInfo() {
+    public static void printCourseInfo() {
         System.out.println(Message.PRINT_COURSE_AND_MISSION);
     }
+
+    public static void printMatchingResult(List<Pairs> pairs) {
+        System.out.println("페어 매칭 결과입니다.");
+        for (Pairs pair: pairs){
+            System.out.println(String.join(" : ",pair.getPairs()));
+        }
+    }
+
 
 
 }

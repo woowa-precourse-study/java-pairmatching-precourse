@@ -1,20 +1,35 @@
 package pairmatching.domain;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MatchingMachine {
-    private final Options options;
-    private final List<List<String>> crews;
+    private final Map<Options,List<Pairs>> matchingMachine=new LinkedHashMap<>();
 
-    public MatchingMachine(String levelInput,String course,String mission, List<List<String>> crews) {
-        Level level = Level.fromLevel(levelInput);
-        level.validateMission(mission);
-        this.options=new Options(level, Course.fromName(course), mission);
-        this.crews=crews;
+    public MatchingMachine() {
+    }
+
+    public void addMatch(Options options, List<Pairs> pairs) {
+        // TODO : 검증 추가
+        this.matchingMachine.put(options,pairs);
+    }
+
+    public List<Pairs> getMatch(Options options) {
+        return matchingMachine.get(options);
     }
 
     // 매칭 정보가 있는지 확인
+    public boolean isAlreadyMatched(Options options){
+        if (matchingMachine.containsKey(options)){
+            return true;
+        }
+        return false;
+    }
+
+    public void reset(){
+        matchingMachine.clear();
+    }
 
 
 }

@@ -3,10 +3,6 @@ package pairmatching;
 import pairmatching.controller.MatchingController;
 import pairmatching.service.MatchingService;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 public class Application {
 
     public static void main(String[] args) {
@@ -18,7 +14,5 @@ public class Application {
             System.out.println(e.getMessage());
         }
     }
-
-
 
 }

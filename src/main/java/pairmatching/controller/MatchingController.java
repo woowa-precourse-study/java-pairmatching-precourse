@@ -1,8 +1,7 @@
 package pairmatching.controller;
 
-import pairmatching.domain.Course;
-import pairmatching.domain.Level;
-import pairmatching.domain.Options;
+import pairmatching.command.*;
+import pairmatching.domain.*;
 import pairmatching.service.MatchingService;
 import pairmatching.utils.Parser;
 import pairmatching.utils.RandomGenerator;
@@ -15,38 +14,36 @@ import java.util.*;
 
 public class MatchingController {
 
-    private Map<String, Runnable> commands = new HashMap<>();
-    private static Map<Options, List<List<String>>> crewGroup = new HashMap<>();
+    private Map<String, Command> commands = new HashMap<>();
+    private final MatchingMachine matchingMachine = new MatchingMachine();
     private final MatchingService matchingService;
-    private static final InputView inputView= new InputView();
-    private static final OutputView outputView= new OutputView();
-    private static String PREFIX_ERROR="[ERROR] ";
+    private static final InputView inputView = new InputView();
 
     public MatchingController(MatchingService matchingService) {
         this.matchingService = matchingService;
+        initCommands();
     }
 
     public void run() {
-        initCommands();
         while(true){
             try {
                 String choice=inputView.readChoice();
+
                 if (choice.equals("Q")){
                     break;
                 }
-                Runnable command = commands.get(choice);
-                command.run();
+                Command command = commands.get(choice);
+                command.execute();
 
             } catch (IllegalArgumentException | NoSuchElementException e) { // 입력안함은 여기서 자동 제거
-                System.out.println(PREFIX_ERROR+e.getMessage());
+                System.out.println("[ERROR] "+e.getMessage());
             }
 
         }
 
     }
 
-    public static Options getOptions(){
-        String input = inputView.readCourseAndMission();
+    public static Options getOptions(String input){
         List<String> inputs = Parser.splitBy(input, ",");
         Course course = Course.fromName(inputs.get(0));
         Level level = Level.fromLevel(inputs.get(1));
@@ -54,71 +51,73 @@ public class MatchingController {
         return new Options(level,course,mission);
     }
 
-    public void initCommands() {
-        commands.put("1", MatchingController::pairMatching);
-        commands.put("2", MatchingController::pairCheck);
-        commands.put("3", MatchingController::pairReset);
-        commands.put("Q", MatchingController::quit);
+    private void initCommands() {
+        commands.put("1", new PairMatching(this));
+        commands.put("2", new PairCheck(this));
+        commands.put("3", new PairReset(this));
+        commands.put("Q", new Quit(this));
     }
 
-    public static void pairMatching() {
-        outputView.printCourseInfo();
+    public void pairMatching() {
+        OutputView.printCourseInfo();
         while(true){
-            Options options=getOptions();
-            if (crewGroup.containsKey(options)){
+            String input = inputView.readCourseAndMission();
+            Options options=getOptions(input);
+            if (matchingMachine.isAlreadyMatched(options)){
                 String response=inputView.readRetry();
                 if (response.equals("아니오")){
                     continue;
                 }
-
             }
 
-            String content = readFile(options.getCourse().getFileName());
+            String content = readFile(options.course().getFileName());  // TODO : 이거 record 정리하기
             List<String> names = RandomGenerator.getRandomNames(Parser.splitBy(content, "\n"));
 
-
             Deque<String> queue = new ArrayDeque<>(names);
-            List<List<String>> crews= new ArrayList<>();
+
+            List<Pairs> pairs= new ArrayList<>();
             while (!queue.isEmpty()){
+                List<String> crews=new ArrayList<>();
                 if (queue.size()==3){
-                    crews.add(List.of(queue.pollFirst(),queue.pollFirst(),queue.pollFirst()));
+                    crews.add(queue.poll());
+                    crews.add(queue.poll());
+                    crews.add(queue.poll());
+                    pairs.add(new Pairs(crews));
                     break;
                 }
-                crews.add(List.of(queue.pollFirst(),queue.pollFirst()));
+                crews.add(queue.poll());
+                crews.add(queue.poll());
+                pairs.add(new Pairs(crews));
             }
-
-            crewGroup.put(options,crews);
+            matchingMachine.addMatch(options, pairs);
 
             System.out.println("페어 매칭 결과입니다.");
-            for (List<String> crew: crews){
-                System.out.println(String.join(" : ",crew));
+            for (Pairs pair: matchingMachine.getMatch(options)){
+                System.out.println(String.join(" : ",pair.getPairs()));
             }
             break;
         }
 
     }
 
-    public static void pairCheck() {
-        outputView.printCourseInfo();
-        Options options=getOptions();
-
-        if (crewGroup.containsKey(options)){
-            System.out.println("페어 매칭 결과입니다.");
-            for (List<String> crew: crewGroup.get(options)){
-                System.out.println(String.join(" : ",crew));
-            }
+    public void pairCheck() {
+        OutputView.printCourseInfo();
+        String input = inputView.readCourseAndMission();
+        Options options=getOptions(input);
+        if (matchingMachine.isAlreadyMatched(options)){
+            OutputView.printMatchingResult(matchingMachine.getMatch(options));
             return;
         }
         throw new IllegalArgumentException("매칭 이력이 없습니다.");
 
     }
 
-    public static void pairReset() {
-        crewGroup = new HashMap<>();
+    public void pairReset() {
+        matchingMachine.reset();
         System.out.println("\n초기화 되었습니다. \n");
     }
 
-    public static void quit() {
+    public void quit() {
         return;
     }
 

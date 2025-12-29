@@ -23,9 +23,6 @@ public interface Validator {
         }
     }
 
-
-
-
 }
 
 

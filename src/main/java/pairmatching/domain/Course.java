@@ -1,8 +1,8 @@
 package pairmatching.domain;
 
 public enum Course {
-    BACKEND("백엔드","backend-crew2.md"),
-    FRONTEND("프론트엔드","frontend-crew2.md");
+    BACKEND("백엔드","backend-crew.md"),
+    FRONTEND("프론트엔드","frontend-crew.md");
 
     private String name;
     private String fileName;
