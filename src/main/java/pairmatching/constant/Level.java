@@ -27,6 +27,14 @@ public enum Level {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_LEVEL.getErrorMessage()));
     }
 
+    public Mission getMission(String missionName) {
+        Mission findMission = Mission.from(missionName);
+        return missions.stream()
+                .filter(mission -> mission.equals(findMission))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_MISSION.getErrorMessage()));
+    }
+
     public List<Mission> getMissions() {
         return missions;
     }

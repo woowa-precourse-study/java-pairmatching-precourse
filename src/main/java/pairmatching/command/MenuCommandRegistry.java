@@ -14,7 +14,7 @@ public class MenuCommandRegistry {
         this.commands = commands;
     }
 
-    public static MenuCommandRegistry defaultRegistry(PairMatchingService service) {
+    public static MenuCommandRegistry from(PairMatchingService service) {
         EnumMap<MenuOption, Command> map = new EnumMap<>(MenuOption.class);
         map.put(MenuOption.A, new FeatureACommand(service));
         map.put(MenuOption.B, new FeatureBCommand(service));

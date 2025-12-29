@@ -36,8 +36,11 @@ public class MatchingResult {
                 .collect(Collectors.toList());
         List<String> shuffleCrews = Randoms.shuffle(preCrews);
 
-        List<Pair> matching = new ArrayList<>();
+        return getPairs(crews, shuffleCrews);
+    }
 
+    private List<Pair> getPairs(Crews crews, List<String> shuffleCrews) {
+        List<Pair> matching = new ArrayList<>();
         int index = 0;
         while (index < shuffleCrews.size()) {
             Crew firstCrew = crews.getCrew(shuffleCrews.get(index++));
@@ -52,21 +55,26 @@ public class MatchingResult {
 
             matching.add(Pair.of(firstCrew, secondCrew));
         }
-
         return matching;
     }
 
     public boolean isPossible(List<Pair> matching, Content content) {
         for (Mission mission : content.getLevel().getMissions()) {
-            if (!mission.equals(content.getMission())) {
-                Content key = Content.of(content.getCourse(), content.getLevel(), mission);
-                List<Pair> matchingHistory = matchingResults.get(key);
-                if (matchingHistory != null) {
-                    for (Pair pair : matching) {
-                        List<Pair> pairs = pair.getPairs();
-                        return new HashSet<>(matchingHistory).containsAll(pairs);
-                    }
-                }
+            if (mission.equals(content.getMission())) {
+                continue;
+            }
+
+            Content key = Content.of(content.getCourse(), content.getLevel(), mission);
+            List<Pair> matchingHistory = matchingResults.get(key);
+
+            if (matchingHistory == null) {
+                continue;
+            }
+
+            for (Pair pair : matching) {
+                List<Pair> pairs = pair.getPairs();
+                return pairs.stream()
+                        .anyMatch(matchingHistory::contains);
             }
         }
         return true;

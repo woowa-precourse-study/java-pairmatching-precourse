@@ -24,23 +24,27 @@ public class FeatureBCommand implements Command {
 
     @Override
     public void execute() {
-        List<Pair> matching = Retry.retryUntilSuccess(() -> {
-            String readContents = InputView.readContents();
-            List<String> rawContents = InputParser.parseContents(readContents);
+        Content content = getContent();
 
-            Course course = Course.from(rawContents.get(0).trim());
-            Level level = Level.from(rawContents.get(1).trim());
-            Mission mission = Mission.from(rawContents.get(2).trim());
+        if (!service.MatchingResultIsExist(content)) {
+            throw new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage());
+        }
 
-            Content content = Content.of(course, level, mission);
-
-            if (!service.MatchingResultIsExist(content)) {
-                throw new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage());
-            }
-
-            return service.getMatching(content);
-        });
+        List<Pair> matching =  service.getMatching(content);
 
         OutputView.printMatching(matching);
+    }
+
+    private static Content getContent() {
+        return Retry.retryUntilSuccess(() -> {
+            String readContents = InputView.readContents();
+            List<String> contents = InputParser.parseContents(readContents);
+
+            Course course = Course.from(contents.get(0).trim());
+            Level level = Level.from(contents.get(1).trim());
+            Mission mission = level.getMission(contents.get(2).trim());
+
+            return Content.of(course, level, mission);
+        });
     }
 }

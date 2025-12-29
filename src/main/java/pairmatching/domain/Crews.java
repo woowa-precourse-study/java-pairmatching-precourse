@@ -36,12 +36,20 @@ public class Crews {
 
     public Crew getCrew(String name) {
         for (List<Crew> crewsOnCourse : crews.values()) {
-            for (Crew crew : crewsOnCourse) {
-                if (crew.getName().equals(name)) {
-                    return crew;
-                }
+            Crew crew = getCrew(name, crewsOnCourse);
+            if (crew != null) {
+                return crew;
             }
         }
         throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getErrorMessage());
+    }
+
+    private static Crew getCrew(String name, List<Crew> crewsOnCourse) {
+        for (Crew crew : crewsOnCourse) {
+            if (crew.getName().equals(name)) {
+                return crew;
+            }
+        }
+        return null;
     }
 }

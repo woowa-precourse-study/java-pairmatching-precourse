@@ -15,15 +15,4 @@ public final class Retry {
             }
         }
     }
-
-    public static void retryUntilSuccess(Runnable action) {
-        while (true) {
-            try {
-                action.run();
-                return;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 }

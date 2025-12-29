@@ -9,7 +9,7 @@ public class Application {
     public static void main(String[] args) {
         // TODO 구현 진행
         PairMatchingService service = new PairMatchingService();
-        MenuCommandRegistry registry = MenuCommandRegistry.defaultRegistry(service);
+        MenuCommandRegistry registry = MenuCommandRegistry.from(service);
         PairMatchingController controller = new PairMatchingController(registry, service);
         try {
             controller.run();

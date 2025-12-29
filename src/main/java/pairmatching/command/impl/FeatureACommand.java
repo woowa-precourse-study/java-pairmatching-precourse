@@ -28,26 +28,10 @@ public class FeatureACommand implements Command {
     public void execute() {
 
         while (true) {
-            Content content = Retry.retryUntilSuccess(() -> {
-                String readContents = InputView.readContents();
-                List<String> contents = InputParser.parseContents(readContents);
+            Content content = getContent();
 
-                Course course = Course.from(contents.get(0).trim());
-                Level level = Level.from(contents.get(1).trim());
-                Mission mission = Mission.from(contents.get(2).trim());
-
-                return Content.of(course, level, mission);
-            });
-
-            if (service.MatchingResultIsExist(content)) {
-                RematchOption rematchOption = Retry.retryUntilSuccess(() -> {
-                    String readRematching = InputView.readRematching();
-                    return RematchOption.from(readRematching);
-                });
-
-                if (rematchOption.equals(RematchOption.NO)) {
-                    continue;
-                }
+            if (isAlreadyMatched(content)) {
+                continue;
             }
 
             // 매칭 실행
@@ -55,12 +39,37 @@ public class FeatureACommand implements Command {
 
             if (matching.isEmpty()) {
                 OutputView.printErrorMessage(new IllegalArgumentException(ErrorMessage.MATCHING_FAIL.getErrorMessage()));
-                continue; // while 처음으로
+                continue;
             }
 
             OutputView.printMatching(matching);
             break;
         }
 
+    }
+
+    private static Content getContent() {
+        return Retry.retryUntilSuccess(() -> {
+            String readContents = InputView.readContents();
+            List<String> contents = InputParser.parseContents(readContents);
+
+            Course course = Course.from(contents.get(0).trim());
+            Level level = Level.from(contents.get(1).trim());
+            Mission mission = level.getMission(contents.get(2).trim());
+
+            return Content.of(course, level, mission);
+        });
+    }
+
+    private boolean isAlreadyMatched(Content content) {
+        if (service.MatchingResultIsExist(content)) {
+            RematchOption rematchOption = Retry.retryUntilSuccess(() -> {
+                String readRematching = InputView.readRematching();
+                return RematchOption.from(readRematching);
+            });
+
+            return rematchOption.equals(RematchOption.NO);
+        }
+        return false;
     }
 }
