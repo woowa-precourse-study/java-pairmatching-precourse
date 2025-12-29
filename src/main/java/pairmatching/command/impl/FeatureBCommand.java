@@ -1,25 +1,20 @@
 package pairmatching.command.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import pairmatching.command.Command;
-import pairmatching.command.CommandResponse;
-import pairmatching.command.RematchOption;
 import pairmatching.constant.Course;
 import pairmatching.constant.ErrorMessage;
 import pairmatching.constant.Level;
 import pairmatching.constant.Mission;
-import pairmatching.domain.Crew;
+import pairmatching.domain.Content;
+import pairmatching.domain.Pair;
 import pairmatching.service.PairMatchingService;
 import pairmatching.util.InputParser;
 import pairmatching.util.Retry;
 import pairmatching.view.InputView;
-import pairmatching.view.model.FeatureAModel;
-import pairmatching.view.model.FeatureBModel;
+import pairmatching.view.OutputView;
 
-public class FeatureBCommand implements Command<FeatureBCommand> {
+public class FeatureBCommand implements Command {
 
     private final PairMatchingService service;
 
@@ -28,22 +23,24 @@ public class FeatureBCommand implements Command<FeatureBCommand> {
     }
 
     @Override
-    public CommandResponse execute() {
-        return Retry.retryUntilSuccess(() -> {
+    public void execute() {
+        List<Pair> matching = Retry.retryUntilSuccess(() -> {
             String readContents = InputView.readContents();
-            List<String> contents = InputParser.parseContents(readContents);
+            List<String> rawContents = InputParser.parseContents(readContents);
 
-            Course course = Course.from(contents.get(0).trim());
-            Level level = Level.from(contents.get(1).trim());
-            Mission mission = Mission.from(contents.get(2).trim());
+            Course course = Course.from(rawContents.get(0).trim());
+            Level level = Level.from(rawContents.get(1).trim());
+            Mission mission = Mission.from(rawContents.get(2).trim());
 
-            if (!service.MatchingResultIsExist(course, level, mission)) {
+            Content content = Content.of(course, level, mission);
+
+            if (!service.MatchingResultIsExist(content)) {
                 throw new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage());
             }
 
-            List<Set<Crew>> matching = service.getMatching(course, level, mission);
-
-            return CommandResponse.keepGoing(new FeatureBModel(matching));
+            return service.getMatching(content);
         });
+
+        OutputView.printMatching(matching);
     }
 }

@@ -44,9 +44,4 @@ public class Crews {
         }
         throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getErrorMessage());
     }
-
-    public void reset() {
-        crews.put(Course.BACKEND, new ArrayList<>());
-        crews.put(Course.FRONTEND, new ArrayList<>());
-    }
 }

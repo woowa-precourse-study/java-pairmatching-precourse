@@ -2,8 +2,6 @@ package pairmatching.controller;
 
 import java.io.IOException;
 import java.util.List;
-import pairmatching.command.CommandResponse;
-import pairmatching.command.Flow;
 import pairmatching.command.MenuCommandRegistry;
 import pairmatching.command.MenuOption;
 import pairmatching.constant.Course;
@@ -11,7 +9,6 @@ import pairmatching.service.PairMatchingService;
 import pairmatching.util.Retry;
 import pairmatching.util.file.FileReader;
 import pairmatching.view.InputView;
-import pairmatching.view.OutputView;
 
 public class PairMatchingController {
 
@@ -29,15 +26,13 @@ public class PairMatchingController {
         service.init();
 
         while (true) {
-            String selection = InputView.readMenuSelection();
-            MenuOption option = Retry.retryUntilSuccess(() -> MenuOption.from(selection));
-            CommandResponse response = registry.execute(option);
+            MenuOption option = readOption();
 
-            if (response.getFlow().equals(Flow.EXIT)) {
+            if (option.equals(MenuOption.QUIT)) {
                 return;
             }
 
-            OutputView.render(response.getModel());
+            registry.execute(option);
         }
     }
 
@@ -49,5 +44,12 @@ public class PairMatchingController {
         fileReader = new FileReader("src/main/resources/frontend-crew.md");
         names = fileReader.readLines();
         service.registerFileInfo(Course.FRONTEND, names);
+    }
+
+    private static MenuOption readOption() {
+        return Retry.retryUntilSuccess(() -> {
+            String selection = InputView.readMenuSelection();
+            return MenuOption.from(selection);
+        });
     }
 }

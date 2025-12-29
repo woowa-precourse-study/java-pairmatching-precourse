@@ -1,25 +1,22 @@
 package pairmatching.command.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import pairmatching.command.Command;
-import pairmatching.command.CommandResponse;
 import pairmatching.command.RematchOption;
 import pairmatching.constant.Course;
 import pairmatching.constant.ErrorMessage;
 import pairmatching.constant.Level;
 import pairmatching.constant.Mission;
-import pairmatching.domain.Crew;
+import pairmatching.domain.Content;
+import pairmatching.domain.Pair;
 import pairmatching.service.PairMatchingService;
 import pairmatching.util.InputParser;
 import pairmatching.util.Retry;
 import pairmatching.view.InputView;
 import pairmatching.view.OutputView;
-import pairmatching.view.model.FeatureAModel;
 
-public class FeatureACommand implements Command<FeatureACommand> {
+public class FeatureACommand implements Command {
 
     private final PairMatchingService service;
 
@@ -28,9 +25,10 @@ public class FeatureACommand implements Command<FeatureACommand> {
     }
 
     @Override
-    public CommandResponse execute() {
+    public void execute() {
+
         while (true) {
-            List<Enum<? extends Enum<?>>> content = Retry.retryUntilSuccess(() -> {
+            Content content = Retry.retryUntilSuccess(() -> {
                 String readContents = InputView.readContents();
                 List<String> contents = InputParser.parseContents(readContents);
 
@@ -38,22 +36,14 @@ public class FeatureACommand implements Command<FeatureACommand> {
                 Level level = Level.from(contents.get(1).trim());
                 Mission mission = Mission.from(contents.get(2).trim());
 
-                return Arrays.asList(course, level, mission);
+                return Content.of(course, level, mission);
             });
 
-            Course course = (Course) content.get(0);
-            Level level = (Level) content.get(1);
-            Mission mission = (Mission) content.get(2);
-
-            if (service.MatchingResultIsExist(course, level, mission)) {
+            if (service.MatchingResultIsExist(content)) {
                 RematchOption rematchOption = Retry.retryUntilSuccess(() -> {
                     String readRematching = InputView.readRematching();
                     return RematchOption.from(readRematching);
                 });
-
-                if (rematchOption.equals(RematchOption.YES)) {
-                    service.removeRecord(course, level, mission);
-                }
 
                 if (rematchOption.equals(RematchOption.NO)) {
                     continue;
@@ -61,27 +51,15 @@ public class FeatureACommand implements Command<FeatureACommand> {
             }
 
             // 매칭 실행
-            List<Set<Crew>> matching = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                matching = service.generateMatching(course, level, mission);
-                if (!matching.isEmpty()) {
-                    break;
-                }
-            }
-
-            try {
-                if (matching.isEmpty()) {
-                    throw new IllegalArgumentException(ErrorMessage.MATCHING_FAIL.getErrorMessage());
-                }
-            } catch (IllegalArgumentException e) {
-                OutputView.printErrorMessage(e);
-            }
+            List<Pair> matching = service.generateMatchingWithRetry(content, 3);
 
             if (matching.isEmpty()) {
-                continue;
+                OutputView.printErrorMessage(new IllegalArgumentException(ErrorMessage.MATCHING_FAIL.getErrorMessage()));
+                continue; // while 처음으로
             }
 
-            return CommandResponse.keepGoing(new FeatureAModel(matching));
+            OutputView.printMatching(matching);
+            break;
         }
 
     }

@@ -4,8 +4,10 @@ import camp.nextstep.edu.missionutils.Randoms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import pairmatching.constant.Course;
@@ -14,34 +16,27 @@ import pairmatching.constant.Mission;
 
 public class MatchingResult {
 
-    private EnumMap<Course, EnumMap<Level, EnumMap<Mission, List<Set<Crew>>>>> matchingResults;
+    private Map<Content, List<Pair>> matchingResults;
 
     public static MatchingResult newInstance() {
         return new MatchingResult();
     }
 
     public void init() {
-        matchingResults = new EnumMap<>(Course.class);
-        for (Course course : Course.values()) {
-            matchingResults.put(course, new EnumMap<>(Level.class));
-            for (Level level : Level.values()) {
-                matchingResults.get(course).put(level, new EnumMap<>(Mission.class));
-                for (Mission mission : Mission.values()) {
-                    matchingResults.get(course).get(level).put(mission, new ArrayList<>());
-                }
-            }
-        }
+        matchingResults = new HashMap<>();
     }
 
-    public boolean isExist(Course course, Level level, Mission mission) {
-        return !matchingResults.get(course).get(level).get(mission).isEmpty();
+    public boolean isExist(Content content) {
+        return matchingResults.containsKey(content);
     }
 
-    public List<Set<Crew>> generateMatching(Crews crews, Course course) {
-        List<String> preCrews = crews.getCrews().get(course).stream().map(Crew::getName).collect(Collectors.toList());
+    public List<Pair> generateMatching(Crews crews, Content content) {
+        List<String> preCrews = crews.getCrews().get(content.getCourse()).stream()
+                .map(Crew::getName)
+                .collect(Collectors.toList());
         List<String> shuffleCrews = Randoms.shuffle(preCrews);
 
-        List<Set<Crew>> matching = new ArrayList<>();
+        List<Pair> matching = new ArrayList<>();
 
         int index = 0;
         while (index < shuffleCrews.size()) {
@@ -51,36 +46,25 @@ public class MatchingResult {
 
             if (index == shuffleCrews.size() - 1) {
                 thirdCrew = crews.getCrew(shuffleCrews.get(index++));
-                matching.add(new HashSet<>(Arrays.asList(firstCrew, secondCrew, thirdCrew)));
+                matching.add(Pair.of(firstCrew, secondCrew, thirdCrew));
                 continue;
             }
 
-            matching.add(new HashSet<>(Arrays.asList(firstCrew, secondCrew)));
+            matching.add(Pair.of(firstCrew, secondCrew));
         }
 
         return matching;
     }
 
-    public void remove(Course course, Level level, Mission mission) {
-        matchingResults.get(course).get(level).get(mission).clear();
-    }
-
-    public boolean isPossible(List<Set<Crew>> matching, Course course, Level level) {
-        EnumMap<Mission, List<Set<Crew>>> matchingHistory = matchingResults.get(course).get(level);
-        for (Set<Crew> crews : matching) {
-            for (Crew crew : crews) {
-                HashSet<Crew> otherCrews = new HashSet<>(crews);
-                otherCrews.remove(crew);
-                for (Crew otherCrew : otherCrews) {
-                    HashSet<Crew> pair = new HashSet<>(Arrays.asList(crew, otherCrew));
-                    for (List<Set<Crew>> histories : matchingHistory.values()) {
-                        if (!histories.isEmpty()) {
-                            for (Set<Crew> history : histories) {
-                                if (history.containsAll(pair)) {
-                                    return false;
-                                }
-                            }
-                        }
+    public boolean isPossible(List<Pair> matching, Content content) {
+        for (Mission mission : content.getLevel().getMissions()) {
+            if (!mission.equals(content.getMission())) {
+                Content key = Content.of(content.getCourse(), content.getLevel(), mission);
+                List<Pair> matchingHistory = matchingResults.get(key);
+                if (matchingHistory != null) {
+                    for (Pair pair : matching) {
+                        List<Pair> pairs = pair.getPairs();
+                        return new HashSet<>(matchingHistory).containsAll(pairs);
                     }
                 }
             }
@@ -88,24 +72,15 @@ public class MatchingResult {
         return true;
     }
 
-    public void addResult(List<Set<Crew>> matching, Course course, Level level, Mission mission) {
-        matchingResults.get(course).get(level).put(mission, matching);
+    public void addResult(List<Pair> matching, Content content) {
+        matchingResults.put(content, matching);
     }
 
-    public List<Set<Crew>> getMatching(Course course, Level level, Mission mission) {
-        return matchingResults.get(course).get(level).get(mission);
+    public List<Pair> getMatching(Content content) {
+        return matchingResults.get(content);
     }
 
     public void reset() {
-        matchingResults = new EnumMap<>(Course.class);
-        for (Course course : Course.values()) {
-            matchingResults.put(course, new EnumMap<>(Level.class));
-            for (Level level : Level.values()) {
-                matchingResults.get(course).put(level, new EnumMap<>(Mission.class));
-                for (Mission mission : Mission.values()) {
-                    matchingResults.get(course).get(level).put(mission, new ArrayList<>());
-                }
-            }
-        }
+        matchingResults = new HashMap<>();
     }
 }
