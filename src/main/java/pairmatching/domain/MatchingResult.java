@@ -1,17 +1,13 @@
 package pairmatching.domain;
 
 import camp.nextstep.edu.missionutils.Randoms;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
-import pairmatching.constant.Course;
-import pairmatching.constant.Level;
 import pairmatching.constant.Mission;
 
 public class MatchingResult {
@@ -34,27 +30,26 @@ public class MatchingResult {
         List<String> preCrews = crews.getCrews().get(content.getCourse()).stream()
                 .map(Crew::getName)
                 .collect(Collectors.toList());
-        List<String> shuffleCrews = Randoms.shuffle(preCrews);
+        List<String> shuffleCrews = new ArrayList<>(Randoms.shuffle(preCrews));
 
         return getPairs(crews, shuffleCrews);
     }
 
     private List<Pair> getPairs(Crews crews, List<String> shuffleCrews) {
         List<Pair> matching = new ArrayList<>();
-        int index = 0;
-        while (index < shuffleCrews.size() - 1) {
-            Crew firstCrew = crews.getCrew(shuffleCrews.get(index++));
-            Crew secondCrew = crews.getCrew(shuffleCrews.get(index++));
-            Crew thirdCrew;
 
-            if (index == shuffleCrews.size() - 1) {
-                thirdCrew = crews.getCrew(shuffleCrews.get(index++));
-                matching.add(Pair.of(firstCrew, secondCrew, thirdCrew));
-                continue;
+        while (shuffleCrews.size() > 1) {
+            Crew firstCrew = crews.getCrew(shuffleCrews.remove(0));
+            Crew secondCrew = crews.getCrew(shuffleCrews.remove(0));
+            Pair pair = Pair.of(firstCrew, secondCrew);
+
+            if (shuffleCrews.size() == 1) {
+                pair.addCrew(crews.getCrew(shuffleCrews.remove(0)));
             }
 
-            matching.add(Pair.of(firstCrew, secondCrew));
+            matching.add(pair);
         }
+
         return matching;
     }
 

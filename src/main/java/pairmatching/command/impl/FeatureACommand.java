@@ -1,6 +1,5 @@
 package pairmatching.command.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import pairmatching.command.Command;
 import pairmatching.command.RematchOption;

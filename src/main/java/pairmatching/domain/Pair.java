@@ -13,7 +13,7 @@ public class Pair {
     }
 
     public static Pair of(Crew... crews) {
-        return new Pair(Arrays.asList(crews));
+        return new Pair(new ArrayList<>(Arrays.asList(crews)));
     }
 
     public List<Pair> getPairs() {
@@ -31,5 +31,9 @@ public class Pair {
 
     public List<Crew> getPair() {
         return pair;
+    }
+
+    public void addCrew(Crew crew) {
+        pair.add(crew);
     }
 }

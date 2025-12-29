@@ -14,7 +14,7 @@ public enum Mission {
     DEPLOYMENT("배포"),
     ;
 
-    private String name;
+    private final String name;
 
     Mission(String name) {
         this.name = name;
