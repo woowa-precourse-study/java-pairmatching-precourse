@@ -24,10 +24,16 @@ public class FeatureBCommand implements Command {
 
     @Override
     public void execute() {
-        Content content = getContent();
+        Content content;
 
-        if (!service.MatchingResultIsExist(content)) {
-            throw new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage());
+        while (true) {
+             content = getContent();
+
+            if (service.MatchingResultIsExist(content)) {
+                break;
+            }
+
+            OutputView.printErrorMessage(new IllegalArgumentException(ErrorMessage.NO_EXIST_MATCHING_RESULT.getErrorMessage()));
         }
 
         List<Pair> matching =  service.getMatching(content);

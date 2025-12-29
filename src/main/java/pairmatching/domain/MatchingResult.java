@@ -42,7 +42,7 @@ public class MatchingResult {
     private List<Pair> getPairs(Crews crews, List<String> shuffleCrews) {
         List<Pair> matching = new ArrayList<>();
         int index = 0;
-        while (index < shuffleCrews.size()) {
+        while (index < shuffleCrews.size() - 1) {
             Crew firstCrew = crews.getCrew(shuffleCrews.get(index++));
             Crew secondCrew = crews.getCrew(shuffleCrews.get(index++));
             Crew thirdCrew;
