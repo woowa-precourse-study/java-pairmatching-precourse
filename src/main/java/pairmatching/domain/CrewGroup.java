@@ -23,14 +23,21 @@ public class CrewGroup {
         List<String> crewNames = crews.stream()
                 .map(Crew::getName).collect(Collectors.toList());
         List<String> randomCrew = RandomGenerator.getRandom(crewNames);
+
+        Deque<String> deque = new LinkedList<>(randomCrew);
         PairGroup pairGroup = new PairGroup();
-        for (int i = 0; i < (randomCrew.size()/2)*2; i += 2) {
+
+        while(!deque.isEmpty()) {
             Pair pair = new Pair();
-            pair.add(randomCrew.get(i));
-            pair.add(randomCrew.get(i+1));
+            pair.add(deque.pollFirst());
+            pair.add(deque.pollFirst());
+
+            if (deque.size()==1){
+                pair.add(deque.pollFirst());
+            }
             pairGroup.add(pair);
-            // TODO: 홀수 일떄 마지막 추가
         }
+
         pairs.put(level,pairGroup);
         // TODO: 2명씩 매칭 + pairs에게 겹치는 페이 있는지 묻기
     }

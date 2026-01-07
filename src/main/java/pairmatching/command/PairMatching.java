@@ -32,15 +32,20 @@ public class PairMatching implements Command {
         Choice choice = doRetry(() -> {
             List<String> inputs = inputView.readChoice();
             Validator.validateParsedLength(inputs.size());
-            return service.getChoice(inputs);
+
+            Choice pick = service.getChoice(inputs);
+            if (machine.isMatchedAlready(pick)){
+                String response = doRetry(inputView::readRematching);
+                if (response.equals("아니오")){
+                    throw new IllegalArgumentException("");
+                }
+            }
+            return pick;
         });
 
-       if (machine.isMatchedAlready(choice)){
-           String response = doRetry(inputView::readRematching);
-           if (response.equals("아니오")){
-               return;
-           }
-       }
+
+
+
         machine.matching(choice);
         List<Pair> pairs= machine.getPairs(choice);
         OutputView.printPairMatching(pairs);

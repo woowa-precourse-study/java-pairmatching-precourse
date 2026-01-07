@@ -11,6 +11,7 @@ public class InputView {
 
     public String readFunction() {
         System.out.println("""
+                
                 기능을 선택하세요.
                 1. 페어 매칭
                 2. 페어 조회
