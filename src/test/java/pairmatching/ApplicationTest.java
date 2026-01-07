@@ -5,9 +5,14 @@ import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.test.NsTest;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import pairmatching.Application;
+import pairmatching.domain.*;
 
 class ApplicationTest extends NsTest {
 
@@ -33,6 +38,27 @@ class ApplicationTest extends NsTest {
                 }
         );
     }
+
+
+    /**
+     * 내가 만든 테스트
+     * **/
+
+
+
+//    @Test
+//    void 페어_초기화_기능() {
+//        Machine machine = new Machine();
+//        Choice choice = new Choice(Course.BACKEND, Level.LEVEL1,"자동차경주");
+//        machine.matching(choice);
+//
+//        assertThat(machine.getPairs(choice).size()).isGreaterThan(0);
+//
+////        machine.reset();
+//
+////        assertThat(machine.getPairs(choice).size()).isEqualTo(0);
+//    }
+
 
     @Override
     public void runMain() {

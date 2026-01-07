@@ -37,8 +37,11 @@ public class Machine {
     }
 
     public List<Pair> getPairs(Choice choice){
-        return results.get(choice).getPairs();
-        // TODO: 결과 없는 경우 처리 필요
+        try{
+            return results.get(choice).getPairs();
+        } catch (NullPointerException e){
+            throw new IllegalArgumentException("[ERROR] 매칭 이력이 없습니다.");
+        }
     }
 
     public void reset(){

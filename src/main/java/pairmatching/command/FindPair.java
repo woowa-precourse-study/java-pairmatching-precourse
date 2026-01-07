@@ -18,7 +18,7 @@ public class FindPair implements Command {
     private final Machine machine;
 
     public FindPair(Service service, Machine machine) {
-        this.inputView=new InputView();
+        this.inputView = new InputView();
         this.service = service;
         this.machine = machine;
     }
@@ -29,14 +29,15 @@ public class FindPair implements Command {
     }
 
     public void findPair() {
-        Choice choice = doRetry(() -> {
+        List<Pair> pairs = doRetry(() -> {
             List<String> inputs = inputView.readChoice();
             Validator.validateParsedLength(inputs.size());
-            return service.getChoice(inputs);
+            Choice choice = service.getChoice(inputs);
+            List<Pair> pair = machine.getPairs(choice);
+            return pair;
         });
-        List<Pair> pairs = machine.getPairs(choice);
-        OutputView.printPairMatching(pairs);
 
+        OutputView.printPairMatching(pairs);
     }
 
     private <T> T doRetry(Supplier<T> action) {
