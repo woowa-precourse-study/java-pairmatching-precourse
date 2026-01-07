@@ -14,6 +14,10 @@ public class Machine {
         }
     }
 
+    public void add(Course course,CrewGroup crewGroup){
+        groups.put(course,crewGroup);
+    }
+
     public boolean isMatchedAlready(Choice choice){
         for (Result result:results){
             if (result.hasHistory(choice)){

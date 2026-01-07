@@ -1,9 +1,16 @@
 package pairmatching.controller;
 
 import pairmatching.command.*;
+import pairmatching.domain.Course;
+import pairmatching.domain.Crew;
+import pairmatching.domain.CrewGroup;
 import pairmatching.domain.Machine;
 import pairmatching.service.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -23,6 +30,7 @@ public class Controller {
 
     public void run() {
         initCommands();
+        initSetting();
         while(true){
             String function = doRetry(inputView::readFunction);
 
@@ -42,6 +50,44 @@ public class Controller {
         commands.put("3", new PairReset(inputView));
         commands.put("Q", new Quit());
     }
+
+    private void initSetting(){
+        machine.add(Course.BACKEND,readBackendFile());
+        machine.add(Course.FRONTEND,readFrontendFile());
+    }
+
+    public CrewGroup readBackendFile() {
+        CrewGroup crewGroup=new CrewGroup();
+        try{
+            BufferedReader br = Files.newBufferedReader(Path.of("src/main/resources/backend-crew.md"));
+            br.readLine(); // header skip
+
+            String line;
+            while((line=br.readLine())!=null){
+                crewGroup.add(new Crew(line, Course.BACKEND));
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("파일을 읽는데 오류가 발생했습니다.");
+        }
+        return crewGroup;
+    }
+
+    public CrewGroup readFrontendFile() {
+        CrewGroup crewGroup=new CrewGroup();
+        try{
+            BufferedReader br = Files.newBufferedReader(Path.of("src/main/resources/frontend-crew.md"));
+            br.readLine(); // header skip
+
+            String line;
+            while((line=br.readLine())!=null){
+                crewGroup.add(new Crew(line, Course.FRONTEND));
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("파일을 읽는데 오류가 발생했습니다.");
+        }
+        return crewGroup;
+    }
+
 
     private <T> T doRetry(Supplier<T> action) {
         int retry = 0;
