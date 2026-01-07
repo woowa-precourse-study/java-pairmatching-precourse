@@ -18,6 +18,12 @@ public interface Validator {
         }
     }
 
+    static void validateResponse(String input) {
+        if (!Set.of("네","아니오").contains(input)) {
+            throw new IllegalArgumentException("[ERROR] 입력이 올바르지 않습니다.");
+        }
+    }
+
     static void validateParsedLength(int length) {
         int maxLength = 3;
         if (length != maxLength) {

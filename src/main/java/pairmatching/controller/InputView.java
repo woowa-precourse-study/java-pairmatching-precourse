@@ -35,6 +35,18 @@ public class InputView {
         return Parser.splitBy(input,",");
     }
 
+    public String readRematching() {
+        System.out.println("""
+                매칭 정보가 있습니다. 다시 매칭하시겠습니까?
+                네 | 아니오
+                """);
+        String input = readInput(List.of(
+                Validator::validateNotBlank,
+                Validator::validateResponse
+        ));
+        return input;
+    }
+
 
 
 

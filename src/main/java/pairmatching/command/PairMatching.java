@@ -34,6 +34,13 @@ public class PairMatching implements Command {
             Validator.validateParsedLength(inputs.size());
             return service.getChoice(inputs);
         });
+
+       if (machine.isMatchedAlready(choice)){
+           String response = doRetry(inputView::readRematching);
+           if (response.equals("아니오")){
+               return;
+           }
+       }
         machine.matching(choice);
         List<Pair> pairs= machine.getPairs(choice);
         OutputView.printPairMatching(pairs);

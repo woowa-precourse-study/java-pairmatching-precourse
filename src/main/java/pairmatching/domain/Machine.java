@@ -16,14 +16,9 @@ public class Machine {
         groups.put(course,crewGroup);
     }
 
-//    public boolean isMatchedAlready(Choice choice){
-//        for (Result result:results){
-//            if (result.hasHistory(choice)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean isMatchedAlready(Choice choice){
+        return results.containsKey(choice);
+    }
 
     public void matching(Choice choice){
         CrewGroup crewGroup = groups.get(choice.getCourse());
