@@ -25,8 +25,10 @@ public class CrewGroup {
         List<String> randomCrew = RandomGenerator.getRandom(crewNames);
 
         Deque<String> deque = new LinkedList<>(randomCrew);
-        PairGroup pairGroup = new PairGroup();
+        PairGroup pairGroup = pairs.getOrDefault(level,new PairGroup());
 
+
+        List<Pair> newPairs = new ArrayList<>();
         while(!deque.isEmpty()) {
             Pair pair = new Pair();
             pair.add(deque.pollFirst());
@@ -35,11 +37,13 @@ public class CrewGroup {
             if (deque.size()==1){
                 pair.add(deque.pollFirst());
             }
+            pairGroup.validateNewMatched(pair);
+            newPairs.add(pair);
+        }
+        for (Pair pair:newPairs){
             pairGroup.add(pair);
         }
-
         pairs.put(level,pairGroup);
-        // TODO: 2명씩 매칭 + pairs에게 겹치는 페이 있는지 묻기
     }
 
     public List<Pair> getPairs(Level level){

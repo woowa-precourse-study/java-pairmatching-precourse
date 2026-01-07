@@ -20,7 +20,7 @@ public class Controller {
     private final Machine machine;
     private final InputView inputView;
     private final Service service;
-    public static final int MAX_RETRY = 10;
+    public static final int MAX_RETRY = 3;
 
     public Controller(Service service) {
         this.inputView = new InputView();

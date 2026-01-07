@@ -43,10 +43,20 @@ public class PairMatching implements Command {
             return pick;
         });
 
+        int retry = 3;
+        while(retry!=0){
+            try{
+                machine.matching(choice);
+                break;
+            } catch (IllegalArgumentException e){
+                retry--;
+                if (retry==0){
+                    System.out.println(e.getMessage());
+                    return;
+                }
+            }
+        }
 
-
-
-        machine.matching(choice);
         List<Pair> pairs= machine.getPairs(choice);
         OutputView.printPairMatching(pairs);
     }

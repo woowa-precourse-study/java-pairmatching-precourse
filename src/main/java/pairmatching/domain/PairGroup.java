@@ -13,4 +13,10 @@ public class PairGroup {
     public List<Pair> getPairs() {
         return pairs;
     }
+
+    public void validateNewMatched(Pair newPair){
+        for (Pair pair:pairs){
+            pair.validateDifferent(newPair);
+        }
+    }
 }
