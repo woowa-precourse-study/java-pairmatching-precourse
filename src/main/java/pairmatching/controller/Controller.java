@@ -46,8 +46,8 @@ public class Controller {
 
     private void initCommands() {
         commands.put("1", new PairMatching(service,machine));
-        commands.put("2", new FindPair(inputView));
-        commands.put("3", new PairReset(inputView));
+        commands.put("2", new FindPair(service,machine));
+        commands.put("3", new PairReset(service,machine));
         commands.put("Q", new Quit());
     }
 

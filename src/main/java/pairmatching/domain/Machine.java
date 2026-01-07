@@ -28,12 +28,21 @@ public class Machine {
     public void matching(Choice choice){
         CrewGroup crewGroup = groups.get(choice.getCourse());
         crewGroup.match(choice.getLevel());
-        results.put(choice,new Result(crewGroup.getPairs(choice.getLevel())));
+        List<Pair> pairs = crewGroup.getPairs(choice.getLevel());
+        saveResult(choice,pairs);
+    }
+
+    public void saveResult(Choice choice,List<Pair> pairs){
+        results.put(choice,new Result(pairs));
     }
 
     public List<Pair> getPairs(Choice choice){
         return results.get(choice).getPairs();
         // TODO: 결과 없는 경우 처리 필요
+    }
+
+    public void reset(){
+        results.clear();
     }
 
 }

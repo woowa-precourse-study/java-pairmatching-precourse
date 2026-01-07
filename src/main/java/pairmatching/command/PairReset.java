@@ -1,12 +1,18 @@
 package pairmatching.command;
 
 import pairmatching.controller.InputView;
+import pairmatching.domain.Machine;
+import pairmatching.service.Service;
 
 public class PairReset implements Command {
     private final InputView inputView;
+    private final Service service;
+    private final Machine machine;
 
-    public PairReset(InputView inputView) {
-        this.inputView=inputView;
+    public PairReset(Service service,Machine machine) {
+        this.inputView=new InputView();
+        this.service=service;
+        this.machine=machine;
     }
 
     @Override
@@ -15,7 +21,7 @@ public class PairReset implements Command {
     }
 
     public void pairReset() {
-
+        machine.reset();
     }
 }
 
