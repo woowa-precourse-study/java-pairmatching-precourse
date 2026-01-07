@@ -37,8 +37,6 @@ public class PairMatching implements Command {
         machine.matching(choice);
         List<Pair> pairs= machine.getPairs(choice);
         OutputView.printPairMatching(pairs);
-
-
     }
 
     private <T> T doRetry(Supplier<T> action) {

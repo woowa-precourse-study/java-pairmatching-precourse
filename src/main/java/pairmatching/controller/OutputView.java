@@ -19,9 +19,16 @@ public class OutputView {
                 """);
     }
 
+
+
     public static void printPairMatching(List<Pair> pairs){
+        System.out.println("페어 매칭 결과입니다.");
         pairs.forEach((pair) -> {
             System.out.println(String.join(" : ",pair.getCrews()));
         });
+    }
+
+    public static void printReset(){
+        System.out.println("초기화 되었습니다. ");
     }
 }

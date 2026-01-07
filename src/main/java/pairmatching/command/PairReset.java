@@ -1,6 +1,7 @@
 package pairmatching.command;
 
 import pairmatching.controller.InputView;
+import pairmatching.controller.OutputView;
 import pairmatching.domain.Machine;
 import pairmatching.service.Service;
 
@@ -22,6 +23,7 @@ public class PairReset implements Command {
 
     public void pairReset() {
         machine.reset();
+        OutputView.printReset();
     }
 }
 
