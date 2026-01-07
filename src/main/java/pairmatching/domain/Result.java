@@ -3,15 +3,13 @@ package pairmatching.domain;
 import java.util.List;
 
 public class Result {
-    private final Choice choice;
     private final List<Pair> pairs;
 
-    public Result(Choice choice, List<Pair> pairs) {
-        this.choice = choice;
+    public Result(List<Pair> pairs) {
         this.pairs = pairs;
     }
 
-    public boolean hasHistory(Choice choice){
-        return (choice.equals(choice));
+    public List<Pair> getPairs() {
+        return pairs;
     }
 }

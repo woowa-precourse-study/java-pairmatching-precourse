@@ -2,8 +2,10 @@ package pairmatching.command;
 
 import pairmatching.controller.Controller;
 import pairmatching.controller.InputView;
+import pairmatching.controller.OutputView;
 import pairmatching.domain.Choice;
 import pairmatching.domain.Machine;
+import pairmatching.domain.Pair;
 import pairmatching.exception.Validator;
 import pairmatching.service.Service;
 
@@ -32,6 +34,9 @@ public class PairMatching implements Command {
             Validator.validateParsedLength(inputs.size());
             return service.getChoice(inputs);
         });
+        machine.matching(choice);
+        List<Pair> pairs= machine.getPairs(choice);
+        OutputView.printPairMatching(pairs);
 
 
     }

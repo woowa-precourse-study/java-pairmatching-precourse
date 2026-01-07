@@ -1,5 +1,9 @@
 package pairmatching.controller;
 
+import pairmatching.domain.Pair;
+
+import java.util.List;
+
 public class OutputView {
     public static void printInfo(){
         System.out.println("""
@@ -13,5 +17,11 @@ public class OutputView {
                   - 레벨5: 
                 ############################################
                 """);
+    }
+
+    public static void printPairMatching(List<Pair> pairs){
+        pairs.forEach((pair) -> {
+            System.out.println(String.join(" : ",pair.getCrews()));
+        });
     }
 }

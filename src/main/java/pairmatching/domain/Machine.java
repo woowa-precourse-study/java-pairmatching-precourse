@@ -1,12 +1,10 @@
 package pairmatching.domain;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 public class Machine {
     private final EnumMap <Course, CrewGroup> groups=new EnumMap<>(Course.class);
-    private final List<Result> results=new ArrayList<>();
+    private final Map<Choice,Result> results=new HashMap<>();
 
     public Machine() {
         for (Course course:Course.values()){
@@ -18,18 +16,24 @@ public class Machine {
         groups.put(course,crewGroup);
     }
 
-    public boolean isMatchedAlready(Choice choice){
-        for (Result result:results){
-            if (result.hasHistory(choice)){
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean isMatchedAlready(Choice choice){
+//        for (Result result:results){
+//            if (result.hasHistory(choice)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public void matching(Choice choice){
+        CrewGroup crewGroup = groups.get(choice.getCourse());
+        crewGroup.match(choice.getLevel());
+        results.put(choice,new Result(crewGroup.getPairs(choice.getLevel())));
+    }
 
-
+    public List<Pair> getPairs(Choice choice){
+        return results.get(choice).getPairs();
+        // TODO: 결과 없는 경우 처리 필요
     }
 
 }
