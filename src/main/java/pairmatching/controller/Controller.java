@@ -1,6 +1,7 @@
 package pairmatching.controller;
 
 import pairmatching.command.*;
+import pairmatching.domain.Machine;
 import pairmatching.service.Service;
 
 import java.util.HashMap;
@@ -9,13 +10,15 @@ import java.util.function.Supplier;
 
 public class Controller {
     private Map<String, Command> commands = new HashMap<>();
+    private final Machine machine;
     private final InputView inputView;
     private final Service service;
-    static final int MAX_RETRY = 10;
+    public static final int MAX_RETRY = 10;
 
     public Controller(Service service) {
         this.inputView = new InputView();
         this.service = service;
+        this.machine = new Machine();
     }
 
     public void run() {
@@ -29,13 +32,12 @@ public class Controller {
 
             Command command = commands.get(function);
             command.execute();
-
         }
 
     }
 
     private void initCommands() {
-        commands.put("1", new PairMatching(inputView));
+        commands.put("1", new PairMatching(service,machine));
         commands.put("2", new FindPair(inputView));
         commands.put("3", new PairReset(inputView));
         commands.put("Q", new Quit());

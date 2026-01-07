@@ -2,6 +2,7 @@ package pairmatching.controller;
 
 import camp.nextstep.edu.missionutils.Console;
 import pairmatching.exception.Validator;
+import pairmatching.utils.Parser;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -23,16 +24,15 @@ public class InputView {
         return input;
     }
 
-    public String readChoice() {
+    public List<String> readChoice() {
         System.out.println("""
                 과정, 레벨, 미션을 선택하세요.
                 ex) 백엔드, 레벨1, 자동차경주
                 """);
         String input = readInput(List.of(
-                Validator::validateNotBlank,
-                Validator::validateChoice
+                Validator::validateNotBlank
         ));
-        return input;
+        return Parser.splitBy(input,",");
     }
 
 

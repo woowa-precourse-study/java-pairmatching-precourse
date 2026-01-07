@@ -18,4 +18,11 @@ public interface Validator {
         }
     }
 
+    static void validateParsedLength(int length) {
+        int maxLength = 3;
+        if (length != maxLength) {
+            throw new IllegalArgumentException("[ERROR] 입력이 올바르지 않습니다.");
+        }
+    }
+
 }
