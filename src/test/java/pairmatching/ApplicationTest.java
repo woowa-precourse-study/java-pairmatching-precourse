@@ -34,6 +34,17 @@ class ApplicationTest extends NsTest {
         );
     }
 
+
+    @Test
+    void 없는_기능에_대한_예외_처리() {
+        assertSimpleTest(
+                () -> {
+                    runException("sakh", "백엔드, 레벨1, 오징어게임");
+                    assertThat(output()).contains(ERROR_MESSAGE);
+                }
+        );
+    }
+
     @Override
     public void runMain() {
         Application.main(new String[]{});

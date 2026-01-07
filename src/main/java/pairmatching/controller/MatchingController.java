@@ -32,6 +32,7 @@ public class MatchingController {
                 if (choice.equals("Q")){
                     break;
                 }
+
                 Command command = commands.get(choice);
                 command.execute();
 
@@ -43,13 +44,7 @@ public class MatchingController {
 
     }
 
-    public static Options getOptions(String input){
-        List<String> inputs = Parser.splitBy(input, ",");
-        Course course = Course.fromName(inputs.get(0));
-        Level level = Level.fromLevel(inputs.get(1));
-        String mission=inputs.get(2);
-        return new Options(level,course,mission);
-    }
+
 
     private void initCommands() {
         commands.put("1", new PairMatching(this));
@@ -57,6 +52,7 @@ public class MatchingController {
         commands.put("3", new PairReset(this));
         commands.put("Q", new Quit(this));
     }
+
 
     public void pairMatching() {
         OutputView.printCourseInfo();
@@ -74,8 +70,8 @@ public class MatchingController {
             List<String> names = RandomGenerator.getRandomNames(Parser.splitBy(content, "\n"));
 
             Deque<String> queue = new ArrayDeque<>(names);
-
             List<Pairs> pairs= new ArrayList<>();
+
             while (!queue.isEmpty()){
                 List<String> crews=new ArrayList<>();
                 if (queue.size()==3){
@@ -85,6 +81,7 @@ public class MatchingController {
                     pairs.add(new Pairs(crews));
                     break;
                 }
+
                 crews.add(queue.poll());
                 crews.add(queue.poll());
                 pairs.add(new Pairs(crews));
@@ -109,7 +106,6 @@ public class MatchingController {
             return;
         }
         throw new IllegalArgumentException("매칭 이력이 없습니다.");
-
     }
 
     public void pairReset() {
@@ -119,6 +115,14 @@ public class MatchingController {
 
     public void quit() {
         return;
+    }
+
+    public static Options getOptions(String input){
+        List<String> inputs = Parser.splitBy(input, ",");
+        Course course = Course.fromName(inputs.get(0));
+        Level level = Level.fromLevel(inputs.get(1));
+        String mission=inputs.get(2);
+        return new Options(level,course,mission);
     }
 
     public static String readFile(String fileName) {

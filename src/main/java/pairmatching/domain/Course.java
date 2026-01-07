@@ -4,8 +4,8 @@ public enum Course {
     BACKEND("백엔드","backend-crew.md"),
     FRONTEND("프론트엔드","frontend-crew.md");
 
-    private String name;
-    private String fileName;
+    private final String name;
+    private final String fileName;
 
     Course(String name, String fileName) {
         this.name = name;

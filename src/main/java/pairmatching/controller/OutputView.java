@@ -1,11 +1,8 @@
 package pairmatching.controller;
 
-import pairmatching.domain.MatchingMachine;
-import pairmatching.domain.Options;
 import pairmatching.domain.Pairs;
 
 import java.util.List;
-import java.util.Map;
 
 public class OutputView {
 
@@ -19,8 +16,6 @@ public class OutputView {
             System.out.println(String.join(" : ",pair.getPairs()));
         }
     }
-
-
 
 }
 
