@@ -1,6 +1,6 @@
-package domain;
+package pairmatching.domain;
 
-import utils.RandomGenerator;
+import pairmatching.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

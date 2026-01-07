@@ -1,7 +1,7 @@
-package utils;
+package pairmatching.utils;
 
 import camp.nextstep.edu.missionutils.Randoms;
-import domain.Crew;
+import pairmatching.domain.Crew;
 
 import java.util.List;
 
