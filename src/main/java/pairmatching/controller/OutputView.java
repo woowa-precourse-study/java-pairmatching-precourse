@@ -1,0 +1,34 @@
+package pairmatching.controller;
+
+import pairmatching.domain.Pair;
+
+import java.util.List;
+
+public class OutputView {
+    public static void printInfo(){
+        System.out.println("""
+                #############################################
+                과정: 백엔드 | 프론트엔드
+                미션:
+                  - 레벨1: 자동차경주 | 로또 | 숫자야구게임
+                  - 레벨2: 장바구니 | 결제 | 지하철노선도
+                  - 레벨3: 
+                  - 레벨4: 성능개선 | 배포
+                  - 레벨5: 
+                ############################################
+                """);
+    }
+
+
+
+    public static void printPairMatching(List<Pair> pairs){
+        System.out.println("페어 매칭 결과입니다.");
+        pairs.forEach((pair) -> {
+            System.out.println(String.join(" : ",pair.getCrews()));
+        });
+    }
+
+    public static void printReset(){
+        System.out.println("초기화 되었습니다. ");
+    }
+}
