@@ -24,11 +24,11 @@ public class Crew {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Crew crew = (Crew) o;
-        return Objects.equals(name, crew.name);
+        return Objects.equals(name, crew.name) && course == crew.course;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, course);
     }
 }

@@ -44,6 +44,43 @@ class ApplicationTest extends NsTest {
      * 내가 만든 테스트
      * **/
 
+    @Test
+    void 재매칭_페어_매칭() {
+        assertShuffleTest(
+                () -> {
+                    run("1", "백엔드, 레벨1, 자동차경주", "1","백엔드, 레벨1, 자동차경주","아니오","프론트엔드, 레벨1, 자동차경주","Q");
+                    assertThat(output()).contains("태웅 : 백호", "치수 : 태섭","매칭 정보가 있습니다. 다시 매칭하시겠습니까?");
+                },
+                Arrays.asList("태웅", "백호", "치수", "태섭")
+        );
+    }
+
+    @Test
+    void 홀수_인원_페어_매칭() {
+        assertShuffleTest(
+                () -> {
+                    run("1", "백엔드, 레벨1, 자동차경주", "Q");
+                    assertThat(output()).contains("태웅 : 백호", "치수 : 태섭 : 지영");
+                },
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영")
+        );
+    }
+
+    @Test
+    void 이미된적있는_페어_매칭_예외테스트() {
+        assertShuffleTest(
+                () -> {
+                    run("1", "백엔드, 레벨1, 자동차경주", "1", "백엔드, 레벨1, 로또");
+                    assertThat(output()).contains("태웅 : 백호", "치수 : 태섭 : 지영");
+                },
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영"),
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영"),
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영"),
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영"),
+                Arrays.asList("태웅", "백호", "치수", "태섭","지영")
+        );
+    }
+
 
 
 //    @Test

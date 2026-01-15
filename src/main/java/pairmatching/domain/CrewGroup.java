@@ -27,7 +27,6 @@ public class CrewGroup {
         Deque<String> deque = new LinkedList<>(randomCrew);
         PairGroup pairGroup = pairs.getOrDefault(level,new PairGroup());
 
-
         List<Pair> newPairs = new ArrayList<>();
         while(!deque.isEmpty()) {
             Pair pair = new Pair();

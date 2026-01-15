@@ -18,8 +18,7 @@ public class Pair {
 
     public void validateDifferent(Pair pair){
         Set<String> newCrew = new HashSet<>(pair.getCrews());
-        newCrew.removeAll(crews);
-        if (newCrew.isEmpty()){
+        if (newCrew.containsAll(crews) || crews.containsAll(newCrew)){
             throw new IllegalArgumentException("[ERROR] 이미 매칭된적 있는 페어입니다.");
         }
 
